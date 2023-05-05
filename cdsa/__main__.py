@@ -44,14 +44,13 @@ parser_github.add_argument(
 if __name__ == "__main__":
     arguments = parser.parse_args()
     logging.basicConfig(
-        level=logging.DEBUG if arguments.debug or os.environ.get("DEBUG") else logging.INFO,
+        level=logging.DEBUG
+        if arguments.debug or os.environ.get("DEBUG")
+        else logging.INFO,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
 
-    GitHub.init(
-        arguments.github_repository,
-        reference=arguments.ref
-    )
+    GitHub.init(arguments.github_repository, reference=arguments.ref)
     logging.info(f"Repository :: {GitHub.repository}")
 
     depgraph = DependencyGraph()
@@ -73,18 +72,17 @@ if __name__ == "__main__":
 
     elif arguments.dockerfile:
         logging.info("In Dockerfile mode")
-        logging.warning("This mode automatically builds the docker image which can have issues")
+        logging.warning(
+            "This mode automatically builds the docker image which can have issues"
+        )
 
-        name = syft.buildContainer(arguments.dockerfile) 
+        name = syft.buildContainer(arguments.dockerfile)
 
         sbom = syft.generateSBOM(name)
-         
-        for manifest, data in sbom.get("manifests", {}).items():
-            data["file"] = {
-                "source_location": arguments.dockerfile
-            }
-            sbom["manifests"][manifest] = data
 
+        for manifest, data in sbom.get("manifests", {}).items():
+            data["file"] = {"source_location": arguments.dockerfile}
+            sbom["manifests"][manifest] = data
 
     if sbom:
         logging.info("Uploading SBOM...")
@@ -96,4 +94,3 @@ if __name__ == "__main__":
         sys.exit(1)
 
     logging.info("Completed")
-

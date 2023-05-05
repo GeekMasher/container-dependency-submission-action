@@ -6,12 +6,10 @@ import subprocess
 
 logger = logging.getLogger("cdsa.syft")
 
-LOCATIONS = [
-    "/usr/local/bin",
-    os.path.expanduser("~/.local/bin")
-]
+LOCATIONS = ["/usr/local/bin", os.path.expanduser("~/.local/bin")]
 
-class Syft():
+
+class Syft:
     def __init__(self) -> None:
         self.name = "syft"
         self.path = None
@@ -42,14 +40,13 @@ class Syft():
         cmd = ["brew", "install", "syft"]
         subprocess.run(cmd, check=True)
 
-
     def generateSBOM(self, image: str) -> dict:
         output = os.path.join(tempfile.gettempdir(), "syft-sbom.json")
         cmd = [self.binary, image, "-o", f"github-json={output}"]
 
         logger.debug(f"SBOM Command :: {cmd}")
-        
-        with open(os.devnull, 'w') as null:
+
+        with open(os.devnull, "w") as null:
             subprocess.run(cmd, stdout=null, stderr=null)
 
         if os.path.exists(output):
@@ -65,10 +62,8 @@ class Syft():
         cmd = ["docker", "build", "-t", name, "-f", path, os.getcwd()]
 
         logger.debug(f"Container Build Command :: `{cmd}`")
-        
+
         subprocess.run(cmd, check=True)
 
         logger.info("Build command finished")
         return name
-
-
