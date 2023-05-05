@@ -53,6 +53,9 @@ class Syft:
         cmd = ["/home/linuxbrew/.linuxbrew/bin/brew", "install", "syft"]
         subprocess.run(cmd, check=True)
 
+        self.path = glob.glob("/home/linuxbrew/.linuxbrew/Cellar/syft/**/bin")[0]
+        logger.info(f"Brew syft install location :: {self.path}")
+
         logger.info("Finished installing!")
 
     def generateSBOM(self, image: str) -> dict:
