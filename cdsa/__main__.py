@@ -1,10 +1,10 @@
+import json
 import os
 import logging
 import argparse
 import sys
 
-from ghastoolkit.octokit.dependencygraph import DependencyGraph
-from ghastoolkit.octokit.github import GitHub
+from ghastoolkit import DependencyGraph, GitHub
 
 from cdsa import __name__ as name
 from cdsa.syft import Syft
@@ -51,6 +51,8 @@ if __name__ == "__main__":
     )
 
     GitHub.init(arguments.github_repository, reference=arguments.ref)
+    GitHub.repository.clone_path = os.getcwd()
+
     logging.info(f"Repository :: {GitHub.repository}")
 
     depgraph = DependencyGraph()
@@ -87,6 +89,11 @@ if __name__ == "__main__":
     if sbom:
         logging.info("Uploading SBOM...")
 
+        # note: need to change some bits before we upload
+        sbom["job"] = {"correlator": name, "id": name}
+        sbom["sha"] = arguments.sha or GitHub.repository.gitsha()
+        sbom["ref"] = arguments.ref or GitHub.repository.reference
+        
         depgraph.submitSbom(sbom)
 
     else:
