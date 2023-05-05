@@ -37,7 +37,7 @@ class Syft:
         """Install syft via Brew"""
         # https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2204-Readme.md#package-management
         # https://github.com/anchore/syft#homebrew
-        cmd = ["brew", "install", "syft"]
+        cmd = ["/home/linuxbrew/.linuxbrew/bin/brew", "install", "syft"]
         subprocess.run(cmd, check=True)
 
     def generateSBOM(self, image: str) -> dict:
