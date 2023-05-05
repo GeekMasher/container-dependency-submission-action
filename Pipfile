@@ -5,6 +5,13 @@ name = "pypi"
 
 [packages]
 requests = "*"
+ghastoolkit = "==0.2.2"
 
 [dev-packages]
 black = "*"
+
+[scripts]
+main = "python -m cdsa"
+# formatting / linting
+fmt = "black cdsa"
+lint = "black --check cdsa"
