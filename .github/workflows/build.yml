@@ -54,4 +54,5 @@ jobs:
     - name: Run action
       uses: ./
       with:
+        dockerfile: "./example/Dockerfile"
         token: ${{ secrets.GITHUB_TOKEN }}
