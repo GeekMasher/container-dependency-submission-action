@@ -42,7 +42,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
       run: |
         PYTHONPATH=$PWD:$PWD/vendor
-        pipenv run python3 -m myaction
+        pipenv run main -d "./examples/Dockerfile"
 
   action-test:
     runs-on: ubuntu-latest
