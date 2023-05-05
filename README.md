@@ -65,6 +65,13 @@ jobs:
           container: "container-name:latest" 
 ```
 
+## Example
+
+![image](https://user-images.githubusercontent.com/2772944/236537635-34cf35ce-4dcc-4a55-bb7b-433267770c5b.png)
+
+*source: [example/Dockerfile](./example/Dockerfile)*
+
+
 ## License 
 
 This project is licensed under the terms of the MIT open source license. Please refer to [MIT](./LICENSE) for the full terms.
