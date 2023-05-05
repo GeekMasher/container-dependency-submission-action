@@ -1,12 +1,17 @@
 import os
 import json
+import glob
 import tempfile
 import logging
 import subprocess
 
 logger = logging.getLogger("cdsa.syft")
 
-LOCATIONS = ["/usr/local/bin", os.path.expanduser("~/.local/bin")]
+LOCATIONS = [
+    "/usr/local/bin",
+    os.path.expanduser("~/.local/bin"),
+]
+LOCATIONS.extend(glob.glob("/home/linuxbrew/.linuxbrew/Cellar/syft/*/bin/syft"))
 
 
 class Syft:
@@ -37,8 +42,11 @@ class Syft:
         """Install syft via Brew"""
         # https://github.com/actions/runner-images/blob/main/images/linux/Ubuntu2204-Readme.md#package-management
         # https://github.com/anchore/syft#homebrew
+        logger.info("Installing syft via brew")
         cmd = ["/home/linuxbrew/.linuxbrew/bin/brew", "install", "syft"]
         subprocess.run(cmd, check=True)
+
+        logger.info("Finished installing!")
 
     def generateSBOM(self, image: str) -> dict:
         output = os.path.join(tempfile.gettempdir(), "syft-sbom.json")
