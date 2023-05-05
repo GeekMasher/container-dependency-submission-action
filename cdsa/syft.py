@@ -11,7 +11,7 @@ LOCATIONS = [
     "/usr/local/bin",
     os.path.expanduser("~/.local/bin"),
 ]
-LOCATIONS.extend(glob.glob("/home/linuxbrew/.linuxbrew/Cellar/syft/*/bin/syft"))
+LOCATIONS.extend(glob.glob("/home/linuxbrew/.linuxbrew/Cellar/syft/**/bin"))
 
 
 class Syft:
@@ -22,20 +22,27 @@ class Syft:
     @property
     def binary(self) -> str:
         if self.path:
-            return self.path
+            return os.path.join(self.path, self.name)
         return self.name
 
-    def check(self):
-        for loc in LOCATIONS:
-            fullpath = os.path.join(loc, "syft")
-            if os.path.exists(fullpath):
-                self.path = fullpath
-                return True
+    def try_command(self, cmd: list[str]) -> bool:
         try:
-            subprocess.check_call(self.binary)
+            with open(os.devnull, "w") as null:
+                subprocess.check_call(cmd, stdout=null, stderr=null)
             return True
         except:
             logger.debug("Syft not found on the system")
+        return False
+
+    def check(self) -> bool:
+        for loc in LOCATIONS:
+            logger.debug(f"Checking location :: {loc}")
+
+            fullpath = os.path.join(loc, "syft")
+
+            if os.path.exists(fullpath) or self.try_command([fullpath]):
+                self.path = loc
+                return True
         return False
 
     def install(self):

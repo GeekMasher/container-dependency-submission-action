@@ -2,6 +2,13 @@
 
 Container Dependency Submission API Action 
 
+## Requirements
+
+- Python 3.9+
+- [Syft](https://github.com/anchore/syft)
+- [optional] Homebrew
+  - Used to dynamically install syft
+
 ## Usage
 
 ```yaml
